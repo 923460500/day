@@ -54,7 +54,8 @@ def scan_dir(url, dirstr):
         print(target_url)
         print("ok!")
         time.sleep(0.1)
-    if re.match(req.status_code,"30.*?")
+    if re.match(req.status_code,"30.*?"):
+        print()
 
 
 #创建线程池
