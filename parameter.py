@@ -8,14 +8,15 @@ import sys
 import getopt
 import logging
 
-logging.basicConfig(level=logging.WARNING,format='%(asctime)s - %(levelname)s:%(message)s')
+logging.basicConfig(level=logging.INFO,format='%(asctime)s - %(levelname)s:%(message)s')
 
 def parameter(argv):
     args, other = getopt.getopt(argv[1:], "u:p:hD:C:", ["help", "table=", "column="])
     err_msg= '''参数输入错误
 [*]使用-h --help 获取帮助
 '''
-    help_msg = '''********************************
+    help_msg = '''
+********************************
 *******this is help*************
 ********************************
 [*]-h --help 获取帮助
@@ -26,7 +27,7 @@ def parameter(argv):
          logging.error(err_msg)
     for name, value in args:
         if name in ('-h', '--help'):
-            return help_msg
+            logging.info(help_msg)
         if name in ('-u', '--url'):
             return format(value)
         if name in ('-D', '--database'):

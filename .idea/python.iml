@@ -10,5 +10,6 @@
     <orderEntry type="module" module-name="dirmap-master" />
     <orderEntry type="module" module-name="sqlmapproject-sqlmap-d7a5601" />
     <orderEntry type="module" module-name="dedecmscan-master" />
+    <orderEntry type="module" module-name="Struts2-Scan-master" />
   </component>
 </module>

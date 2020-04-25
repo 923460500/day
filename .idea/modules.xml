@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://E:/tools/Struts2-Scan-master/.idea/Struts2-Scan-master.iml" filepath="E:/tools/Struts2-Scan-master/.idea/Struts2-Scan-master.iml" />
       <module fileurl="file://$USER_HOME$/Desktop/dedecmscan-master/.idea/dedecmscan-master.iml" filepath="$USER_HOME$/Desktop/dedecmscan-master/.idea/dedecmscan-master.iml" />
       <module fileurl="file://G:/dirmap-master/.idea/dirmap-master.iml" filepath="G:/dirmap-master/.idea/dirmap-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/python.iml" filepath="$PROJECT_DIR$/.idea/python.iml" />
