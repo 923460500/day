@@ -73,11 +73,12 @@ if __name__ == '__main__':
         argv = sys.argv
         url = parameter.parameter(argv)
         print(url)
-        temp=5
-        dir_str = get_dir_asp()
-        dir_len = len(dir_str)
-        count = math.ceil(dir_len / temp)
-        for j in range(count):
-            manyThread(url,5)
+        if url != None:
+            temp=5
+            dir_str = get_dir_asp()
+            dir_len = len(dir_str)
+            count = math.ceil(dir_len / temp)
+            for j in range(count):
+                manyThread(url,5)
     except KeyboardInterrupt:
         exit(0)

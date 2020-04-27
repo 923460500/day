@@ -1,9 +1,10 @@
 # coding:utf-8
 
-import logging
-
-logging.basicConfig(level=logging.DEBUG,format='%(asctime)s - %(levelname)s:%(message)s')
-
-
-logging.warning("user [alex] attempted wrong password more than 3 times")
-logging.critical("server is down")
+import requests
+req=requests.get("http://127.0.0.1:8775/scan/12b3c2b27b03905f/log")
+req_data=req.json()
+print(type(req_data['log']))
+for i in req_data:
+    print(i)
+    for j in req_data['success']:
+        print(req_data['success'])
