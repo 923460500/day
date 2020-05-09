@@ -29,21 +29,20 @@ class scandir:
         for i in scan_str:
             target_url = self.url +i
             req = requests.get(url=target_url,timeout=1)
-            print("scaning...",target_url)
+            print("scaning...")
             if req.status_code==200:
-                print(target_url,"ok!")
+                print(target_url,"可能是危险链接!")
                 sucess_url.append(target_url)
                 time.sleep(0.1)
             elif req.status_code == 302:
                 print("so many try,exit")
                 break
-        print("write")
-        write_file.write_file(sucess_url,"scan_web")
+        print("扫描结果已写入result目录下")
+#        write_file.write_file(sucess_url,"scan_web","web")
 
-
-if __name__ == '__main__':
-    url = parameter.parameter(sys.argv)
-    print(url)
+def scan_web(url):
     if url != None:
+        print('-' * 15 + "危险目录检测开始" + '-' * 15)
         scan_str = scandir(url)
         scan_str.print_str()
+        print('-' * 15 + "危险目录检测结束" + '-' * 15)

@@ -9,6 +9,8 @@ from time import sleep
 import threading
 import math
 import re
+import write_file
+import os
 
 def get_dir_asp():
     with open("lib/ASP.txt", "r") as f:
@@ -38,7 +40,7 @@ def get_dir_jsp():
 
 
 def get_dir_php():
-    with open("lib/PHP.txt", "r") as f:
+    with open("lib/test.txt", "r") as f:
         dir_str = f.readlines()
     dirstr = []
     for i in dir_str:
@@ -46,39 +48,52 @@ def get_dir_php():
     return dirstr
 
 
-def scan_dir(url, dirstr):
-    target_url = "http://" + url + dirstr
-    req = requests.get(target_url, timeout=1)
-    print("scaning..",target_url)
-    if req.status_code == 200:
-        print(target_url)
-        print("ok!")
-        time.sleep(0.1)
-    if re.match(req.status_code,"30.*?"):
-        print()
+def scan_dir(url, dir_str):
+    success_url = []
+    count = 0
+    for i in dir_str:
+        target_url = "http://" + url + i
+        req = requests.get(url=target_url, timeout=1)
+        if len(success_url) !=0:
+            for j in success_url:
+                print(j,"可能是危险的管理员登录路径！！！")
+        print("scaning..")
+        if req.status_code == 200:
+            print(target_url)
+            success_url.append(target_url)
+            time.sleep(0.1)
+        if req.status_code == 302:
+            print(target_url,"链接被拒绝！")
+            exit(0)
+        count +=1
+        if count%7 == 0:
+            os.system('cls')
+    if len(success_url) != 0:
+     #   write_file.write_file(success_url, "admin", "web")
+        print("扫描结束，结果已写入result目录下adminweb.html!")
+    else:
+        print(url,"没有找到管理员路径")
 
 
 #创建线程池
-def manyThread(url,temp):
-    threadlist = []
-    for i in range(temp):
-            t = Thread(target=scan_dir, args=(url,dir_str[i],))
-            threadlist.append(t)
-    for t in threadlist:
-            t.start()
+#def manyThread(url,temp):
+ #   threadlist = []
+ #   for i in range(temp):
+        #    t = Thread(target=scan_dir, args=(url,dir_str[i],))
+        #    threadlist.append(t)
+ #   for t in threadlist:
+     #       t.start()
 
 
-if __name__ == '__main__':
+def mycan(url):
+    print('-' * 15 + "管理员目录检测开始" + '-' * 15)
     try:
-        argv = sys.argv
-        url = parameter.parameter(argv)
-        print(url)
         if url != None:
             temp=5
-            dir_str = get_dir_asp()
+            dir_str = get_dir_php()
             dir_len = len(dir_str)
             count = math.ceil(dir_len / temp)
-            for j in range(count):
-                manyThread(url,5)
+            scan_dir(url,dir_str)
     except KeyboardInterrupt:
         exit(0)
+    print('-' * 15 + "管理员目录检测结束" + '-' * 15)

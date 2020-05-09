@@ -1,10 +1,33 @@
 # coding:utf-8
-
+import shlex
+import random
+import base64
+import copy
+import os
+import hashlib
+import string
+import click
 import requests
-req=requests.get("http://127.0.0.1:8775/scan/12b3c2b27b03905f/log")
-req_data=req.json()
-print(type(req_data['log']))
-for i in req_data:
-    print(i)
-    for j in req_data['success']:
-        print(req_data['success'])
+import urllib.request
+import urllib.parse
+import urllib.error
+import time
+from requests.exceptions import ChunkedEncodingError, ConnectionError, ConnectTimeout
+from urllib.parse import quote, unquote
+from functools import partial
+from bs4 import BeautifulSoup
+from concurrent import futures
+
+
+def get_hash():
+    """获取随机字符串"""
+    letters = string.ascii_letters
+    print(letters)
+    rand = ''.join(random.sample(letters, 10))
+    print(type(rand))
+    hash = hashlib.md5(rand.encode()).hexdigest()
+    return hash
+if __name__ == '__main__':
+    a= str(b'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\r\n<html xmlns="http://www.w3.org/1999/xhtml">\r\n<head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />\r\n<title>\xe6\x88\x91\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99- \xe4\xbc\x9a\xe5\x91\x98\xe7\x99\xbb\xe5\xbd\x95</title>\r\n<link href="templets/style/login.css" rel="stylesheet" type="text/css" />\r\n<script src="templets/js/j.js" language="javascript" type="text/javascript"></script>\r\n<script type="text/javascript">\r\nfunction changeAuthCode() {\r\n\tvar num = \tnew Date().getTime();\r\n\tvar rand = Math.round(Math.random() * 10000);\r\n\tnum = num + rand;\r\n\t$(\'#ver_code\').css(\'visibility\',\'visible\');\r\n\tif ($("#vdimgck")[0]) {\r\n\t\t$("#vdimgck")[0].src = "../include/vdimgck.php?tag=" + num;\r\n\t}\r\n\treturn false;\t\r\n}\r\n\r\n</script>\r\n<style type="text/css">\r\n<!--\r\n.vermenu{\r\n\tbackground:#FFFFFF none repeat scroll 0 0;\r\n\tborder:1px solid #EEEEEE;\r\n\tposition:absolute;\r\n\ttop: 208px;\r\n}\r\n-->\r\n</style>\r\n</head>\r\n<body>\r\n<div class="header">\r\n  <div class="auto960">\r\n    <ul class="userMenu fRight">\r\n      <li> <a title="\xe7\xbd\x91\xe7\xab\x99\xe4\xb8\xbb\xe9\xa1\xb5" href="../">\xe7\xbd\x91\xe7\xab\x99\xe4\xb8\xbb\xe9\xa1\xb5</a> </li>\r\n      <li> <a title="\xe6\xb3\xa8\xe5\x86\x8c" href="../member/index_do.php?fmdo=user&dopost=regnew">\xe6\xb3\xa8\xe5\x86\x8c</a> </li>\r\n      <li> <a title="\xe7\x99\xbb\xe5\xbd\x95" href="../member/login.php">\xe7\x99\xbb\xe5\xbd\x95</a> </li>\r\n      <li class="help"> <a href="http://help.dedecms.com" title="DEDECMS \xe5\xb8\xae\xe5\x8a\xa9\xe4\xb8\xad\xe5\xbf\x83" target="_blank">\xe5\xb8\xae\xe5\x8a\xa9</a> </li>\r\n    </ul>\r\n    <span>\r\n    <script type="text/javascript">\r\n var now=(new Date()).getHours();\r\n if(now>0&&now<=6){\r\ndocument.write("\xe5\x8d\x88\xe5\xa4\x9c\xe5\xa5\xbd\xef\xbc\x8c");\r\n }else if(now>6&&now<=11){\r\n document.write("\xe6\x97\xa9\xe4\xb8\x8a\xe5\xa5\xbd\xef\xbc\x8c");\r\n }else if(now>11&&now<=14){\r\n document.write("\xe4\xb8\xad\xe5\x8d\x88\xe5\xa5\xbd\xef\xbc\x8c");\r\n }else if(now>14&&now<=18){\r\n document.write("\xe4\xb8\x8b\xe5\x8d\x88\xe5\xa5\xbd\xef\xbc\x8c");\r\n }else{\r\n document.write("\xe6\x99\x9a\xe4\xb8\x8a\xe5\xa5\xbd\xef\xbc\x8c");\r\n }\r\n</script>\r\n    <i class="green">\xe6\xb8\xb8\xe5\xae\xa2</i> \xe4\xbd\xa0\xe5\x8f\xaf\xe4\xbb\xa5\xe9\x80\x89\xe6\x8b\xa9\xe5\x88\xb0 </span> </div>\r\n</div>\r\n<div class="wrapper">\r\n  <div class="logo fLeft"> <a href="/"> <img  style="margin:8px 0 0 25px;"alt="\xe4\xbc\x9a\xe5\x91\x98\xe4\xb8\xad\xe5\xbf\x83" src="../member/templets/images/login_logo.gif"/></a></div>\r\n  <div class="banner fRight"> <img src="../member/templets/images/530x56.gif" width="530" height="56" /></div>\r\n</div>\r\n<div class="login bor">\r\n  <div class="main fLeft">\r\n    <h3>\xe8\xaf\xb7\xe5\x9c\xa8\xe8\xbf\x99\xe9\x87\x8c\xe7\x99\xbb\xe5\xbd\x95<em><a href="index_do.php?fmdo=user&dopost=regnew">\xe8\xbf\x98\xe6\xb2\xa1\xe6\xb3\xa8\xe5\x86\x8c \xe7\x82\xb9\xe5\x87\xbb\xe8\xbf\x99\xe9\x87\x8c</a></em></h3>\r\n    <form name=\'form1\' method=\'POST\' action=\'index_do.php\'>\r\n      <input type="hidden" name="fmdo" value="login">\r\n      <input type="hidden" name="dopost" value="login">\r\n      <input type="hidden" name="gourl" value="\\"><if<x>rame src=123123>\\"">\r\n      <ul>\r\n        <li> <span>\xe7\x94\xa8\xe6\x88\xb7\xe5\x90\x8d\xef\xbc\x9a</span>\r\n          <input id="txtUsername" class="text login_from" type="text" name="userid"/>\r\n        </li>\r\n        <li> <span>\xe5\xaf\x86&nbsp;&nbsp;&nbsp;\xe7\xa0\x81\xef\xbc\x9a</span>\r\n          <input id="txtPassword" class="text login_from2" type="password" name="pwd"/>\r\n        </li>\r\n        <li> <span>\xe9\xaa\x8c\xe8\xaf\x81\xe7\xa0\x81\xef\xbc\x9a</span>\r\n          <input id="vdcode" class="text login_from3" type="text" style="width: 50px; text-transform: uppercase;" name="vdcode"/>\r\n          <img id="vdimgck" align="absmiddle" onclick="this.src=this.src+\'?\'" style="cursor: pointer;" alt="\xe7\x9c\x8b\xe4\xb8\x8d\xe6\xb8\x85\xef\xbc\x9f\xe7\x82\xb9\xe5\x87\xbb\xe6\x9b\xb4\xe6\x8d\xa2" src="../include/vdimgck.php"/>\r\n           \xe7\x9c\x8b\xe4\xb8\x8d\xe6\xb8\x85\xef\xbc\x9f <a href="#" onclick="changeAuthCode();">\xe7\x82\xb9\xe5\x87\xbb\xe6\x9b\xb4\xe6\x8d\xa2</a> </li>\r\n        <li> <span>\xe6\x9c\x89\xe6\x95\x88\xe6\x9c\x9f\xef\xbc\x9a</span>\r\n          <input type="radio" value="2592000" name="keeptime" id="ra1"/>\r\n          <label for="ra1">\xe4\xb8\x80\xe4\xb8\xaa\xe6\x9c\x88</label>\r\n          <input type="radio" checked="checked" value="604800" name="keeptime" id="ra2"/>\r\n          <label for="ra2">\xe4\xb8\x80\xe5\x91\xa8</label>\r\n          <input type="radio" value="86400" name="keeptime"  id="ra3"/>\r\n          <label for="ra3">\xe4\xb8\x80\xe5\xa4\xa9</label>\r\n          <input type="radio" value="0" name="keeptime"  id="ra4"/>\r\n          <label for="ra4">\xe5\x8d\xb3\xe6\x97\xb6</label></li>\r\n        <li>\r\n          <button id="btnSignCheck" class="button2" type="submit">\xe7\x99\xbb&nbsp;\xe5\xbd\x95</button>\r\n          <a href="resetpassword.php">\xe5\xbf\x98\xe8\xae\xb0\xe5\xaf\x86\xe7\xa0\x81\xef\xbc\x9f</a> </li>\r\n      </ul>\r\n    </form>\r\n  </div>\r\n  <div class="login_sidebar fRight">\r\n    <p><span>\xe8\xbf\x98\xe6\xb2\xa1\xe6\x9c\x89\xe6\xb3\xa8\xe5\x86\x8c\xe5\x90\x97\xef\xbc\x9f</span><br />\r\n      \xe6\x9c\xac\xe7\xab\x99\xe7\x9a\x84\xe8\xb4\xa6\xe5\x8f\xb7\xe9\x83\xbd\xe6\xb2\xa1\xe6\x9c\x89\xef\xbc\x9f\xe4\xbd\xa0\xe4\xb9\x9f\xe5\xa4\xaa\xe8\x90\xbd\xe4\xbc\x8d\xe4\xba\x86<br />\r\n      \xe8\xb5\xb6\xe7\xb4\xa7\xe5\x8e\xbb\xe6\xb3\xa8\xe5\x86\x8c\xe4\xb8\x80\xe4\xb8\xaa\xe5\x90\xa7\xe3\x80\x82</p>\r\n    <button class="signUp" onclick="javascript:location=\'index_do.php?fmdo=user&dopost=regnew\'">\xe6\xb3\xa8\xe5\x86\x8c</button>\r\n  </div>\r\n</div>\r\n<script language="javascript" type="text/javascript">\r\n\twindow.onload=function (){\r\n\t\tsetInterval("document.getElementById(\'time\').innerHTML=new Date().toLocaleString()+\' \xe6\x98\x9f\xe6\x9c\x9f\'+\'\xe6\x97\xa5\xe4\xb8\x80\xe4\xba\x8c\xe4\xb8\x89\xe5\x9b\x9b\xe4\xba\x94\xe5\x85\xad\'.charAt(new Date().getDay());",1000);\r\n\t}\r\n</script>\r\n<div class="footer bor">\r\n  <div class="fLeft mL10">Copyright &copy; 2002-2010 DEDECMS. \xe7\xbb\x87\xe6\xa2\xa6\xe7\xa7\x91\xe6\x8a\x80 \xe7\x89\x88\xe6\x9d\x83\xe6\x89\x80\xe6\x9c\x89</div>\r\n  <div class="fRight mR10" id="time">  </div>\r\n</div>\r\n</body>\r\n</html>\r\n')
+    if "rame src=123123>" in a and 1==1:
+        print("yes")

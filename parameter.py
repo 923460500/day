@@ -7,11 +7,12 @@
 import sys
 import getopt
 import logging
+import click
 
 logging.basicConfig(level=logging.INFO,format='%(asctime)s - %(levelname)s:%(message)s')
 
 def parameter(argv):
-    args, other = getopt.getopt(argv[1:], "u:p:hD:C:", ["help", "table=", "column="])
+    args, other = getopt.getopt(argv[1:], "u:p:hD:C:m:n:", ["help", "moudle","name","Webpath"])
     err_msg= '''参数输入错误
 [*]使用-h --help 获取帮助
 '''
@@ -24,7 +25,8 @@ def parameter(argv):
 [*]-o  其他帮助
 '''
     if not args:                    # 参数为空
-         logging.error(err_msg)
+        logging.error(err_msg)
+        return None
     for name, value in args:
         if name in ('-h', '--help'):
             logging.info(help_msg)

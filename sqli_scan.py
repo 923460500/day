@@ -81,18 +81,10 @@ def task_delete(server, taskid):
     requests.get(url)
 
 
-def get_url(urls):
-    newurl = []
-    for url in urls:
-        if '?' in url:
-            newurl.append(url)
-    return newurl
 
-
-if __name__ == "__main__":
+def sqli_start(url):
     usage()
-    targets = [x.rstrip() for x in open(sys.argv[1])]
-    targets = get_url(targets)
+    targets = url
     server = 'http://127.0.0.1:8775'
     headers = {'Content-Type': 'application/json'}
     i = 0

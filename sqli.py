@@ -5,6 +5,8 @@ import time
 import json
 from threading import Thread
 import write_file
+import parameter
+import sys
 
 sqlapi_url = "http://127.0.0.1:8775"
 
@@ -45,8 +47,6 @@ class client():
             return None
 
     def get_scan_status(self):
-        #   print(sqlapi_url + '/scan/' +self.taskid + '/status')
-        #   print(requests.get(sqlapi_url + '/scan/' + self.taskid + '/status').json()['status'])
         self.status = requests.get(sqlapi_url + '/scan/' + self.taskid + '/status').json()['status']
         if self.status == 'terminated':
             self.scan_end_time = time.time()
@@ -94,14 +94,16 @@ class client():
 
     def get_scan_log(self):
         r = requests.get(self.sqlapi_url + '/scan/' + self.taskid + '/log')
+        print(r.json())
         return r.json()
 
 
-def main():
-    print('-' * 15 + "start working" + '-' * 15)
-    target = "http://localhost:81/sqli/Less-1/"
-    task1 = Thread(target=set_start_get_result, args=(target,))
-    task1.start()
+def sqli_start(url,my_scan):
+    print('-' * 15 + "sql注入检测开始" + '-' * 15)
+    target = url
+    if target != None:
+        task1 = Thread(target=set_start_get_result, args=(target,my_scan,))
+        task1.start()
 
 
 def time_deal(mytime):
@@ -110,25 +112,29 @@ def time_deal(mytime):
     return second_deal_time
 
 
-def set_start_get_result(url):
+def set_start_get_result(url,my_scan):
     print(url)
     current_taskid = my_scan.get_task_new()
     print("task_id:", current_taskid)
     my_scan.set_task_options(url=url)
     print('扫描id:' + str(my_scan.get_start_scan(url=url)))
-    print('扫描开始时间:' + str(time_deal(my_scan.scan_start_time)))
+    print('sql注入扫描开始时间:' + str(time_deal(my_scan.scan_start_time)))
     while True:
-        if my_scan.get_scan_status():
-            scan_data = my_scan.get_result()
-            print("当前数据库名：" + scan_data[-1]['value'])
-            print("当前用户名" + scan_data[-2]['value'])
-            print("数据库版本", scan_data[-3]['value'][0]['dbms_version'])
-            print("扫描结束时间" + str(time_deal(my_scan.scan_end_time)))
-            print("扫描日志" + type(my_scan.get_scan_log()))
-            print('-' * 15 + "sql注入检测结束" + '-' * 15)
+        if my_scan.get_scan_status():               # 扫描完毕
+            scan_data = my_scan.get_result()            # 保存扫描结果
+            if scan_data is not None:               # 判断结果是否为空
+                print("当前数据库名：" + scan_data[-1]['value'])           # 输出数据库名
+                print("当前用户名" + scan_data[-2]['value'])             # 输出当前用户名
+                print("数据库版本", scan_data[-3]['value'][0]['dbms_version'])           # 输出数据库版本
+                print("sql注入扫描结束时间" + str(time_deal(my_scan.scan_end_time)))            # 输出扫描结束时间
+                print("扫描日志" , my_scan.get_scan_log())                  # 输出扫描日志
+                print('-' * 15 + "sql注入检测结束" + '-' * 15)
+            else:                           # 不存在注入输出下面的信息
+                print("sql注入扫描结束时间" + str(time_deal(my_scan.scan_end_time)))            # 输出扫描结束时间
+                print('-' * 15 + "sql注入检测结束" + '-' * 15)
+                print(url,"似乎不存在SQL注入漏洞，可使用-h使用其他模块！")
             break
 
 
-if __name__ == '__main__':
-    my_scan = client("1a3e1696122b26bc80161a886ca4dbd0")
-    main()
+def sqli(url,my_scan):
+    sqli_start(url,my_scan)

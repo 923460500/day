@@ -1,2 +1,10 @@
-/test.php
-/.git
+/syssite/install/ini_setup.php
+/wp-login.php
+/admin888/admin.php
+/fonts/login.php
+/syssite/shopadmin/core.php
+/beingmate_in.php
+/1.rar
+/1.php
+/2.php
+/3.php
